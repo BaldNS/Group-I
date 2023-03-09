@@ -1,0 +1,86 @@
+﻿@page
+@model LectureNotesProject.Pages.Practice.ControlsAndFormsModel
+@{
+}
+@*practice controling forms from canvas*@
+<h1>HTML Controls and Multiple Forms on a Single Page</h1>
+<br />
+<h2>Select List: Single Selection Only</h2>
+
+<form asp-page-handler="SingleSelect" method="post">
+    <select asp-for="SelectedNumber" class="form-select">
+      <option selected>CIS 454</option>
+      <option value="1">CIS 484</option>
+      <option value="2">CIS 331</option>
+      <option value="3">CIS 330</option>
+    </select>
+    <br />
+    <button class="btn btn-primary">Submit Selection</button>
+</form>
+@if (Model.SelectMessage != null)
+{
+    <p>@Model.SelectMessage</p>
+}
+
+<br />
+<h2>Multiple Select Box</h2>
+<form asp-page-handler="MultiSelect" method="post">
+    <select class="form-select" asp-for="SelectedToppings" multiple>
+        <option value="0">Pizza</option>
+        <option value="1">Salad</option>
+        <option value="2">Cheese/Meat Board</option>
+        <option value="3">Lasagna</option>
+    </select>
+    <br />
+    <button class="btn btn-primary">Submit Selections</button>
+</form>
+@if (Model.MultiSelectMessage != null)
+{
+    <p>@Model.MultiSelectMessage</p>
+}
+
+<br />
+<h2>Checkboxes</h2><br />
+If the properties in the data model you bind to are boolean values,<br />
+the inputs will automatically become Checkboxes.
+<form asp-page-handler="Checkboxes" method="post">
+    <input asp-for="LargePizzaCheck" /> Large Pizza?
+    <br />
+    <input asp-for="DiscountCheck" /> Apply Discount?
+    <br />
+    <button class="btn btn-primary">Submit Checked Options</button>
+</form>
+@if (Model.CheckBoxMessage != null)
+{
+    <p>@Model.CheckBoxMessage</p>
+}
+
+<br />
+<h2>Radio Buttons</h2>
+<form asp-page-handler="RadioButtons" method="post">
+    <input asp-for="SelectedRadioValue" type="radio" value="1" /> Option 1: Marinara Sauce<br />
+    <input asp-for="SelectedRadioValue" type="radio" value="2" /> Option 2: Alfredo Sauce<br />
+    <input asp-for="SelectedRadioValue" type="radio" value="3" /> Option 3: No Sauce<br />
+    <br />
+    <button class="btn btn-primary">Submit Radio Option</button>
+</form>
+@if (Model.RadioButtonMessage != null)
+{
+    <p>@Model.RadioButtonMessage</p>
+}
+<br />
+<h2>Dates and Times</h2>
+<form asp-page-handler="DateAndTime" method="post">
+    DateTime:<br />
+    <input type="datetime-local" asp-for="FullDateAndTime" />
+    <br />
+    <input type="date" asp-for="JustTheDate" />
+    <br />
+    <input type="time" asp-for="JustTheTime" />
+    <br />
+    <button class="btn btn-primary">Submit TimeStamps</button>
+</form>
+@if (Model.DateTimeMessage != null)
+{
+    <p>@Model.DateTimeMessage</p>
+}

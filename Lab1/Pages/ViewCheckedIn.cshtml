@@ -1,0 +1,53 @@
+﻿@page
+@using System.Data.SqlClient;
+@using Lab1.Pages.DB;
+@model Lab2.Pages.ViewCheckedInModel
+@{
+
+
+    if (HttpContext.Session.GetString("username") != null)
+    {
+        @*Shows the checked in office hours for signed in student*@
+        <p> You are checked into the following office hours: </p>
+        <table class="table table-bordered table-responsive table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Professor:</th>
+                    <th>Day:</th>
+                    <th>Time:</th>
+                    <th>Office Room:</th>
+                    <th>Number of Students in Queue:</th>
+                    <th>Position in Queue:</th> @* New Column *@
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    string sqlQuery = @"SELECT F.Professor, OH.OfficeDate, OH.OfficeTime, OH.OfficeRoom, QCount.NumTimes,
+        (SELECT COUNT(*) FROM Queue Q2 WHERE Q2.OfficeHourID = OH.OfficeHourID AND Q2.QueueID < Q.QueueID) + 1 AS PositionInQueue
+        FROM OfficeHour OH
+        INNER JOIN Faculty F ON OH.ProfessorID = F.ProfessorID
+        INNER JOIN Queue Q ON OH.OfficeHourID = Q.OfficeHourID
+        INNER JOIN StudentCredentials SC ON Q.StudentID = SC.StudentCredID
+        INNER JOIN (SELECT OfficeHourID, COUNT(*) AS NumTimes FROM Queue GROUP BY OfficeHourID) QCount
+        ON Q.OfficeHourID = QCount.OfficeHourID
+        WHERE SC.Username = '" + HttpContext.Session.GetString("username") + "';";
+
+                    SqlDataReader ScheduleReader = DBClass.GeneralReaderQuery(sqlQuery);
+
+                    while (ScheduleReader.Read())
+                    {
+                        <tr>
+                            <td>@ScheduleReader["Professor"]</td>
+                            <td>@ScheduleReader["OfficeDate"]</td>
+                            <td>@ScheduleReader["OfficeTime"]</td>
+                            <td>@ScheduleReader["OfficeRoom"]</td>
+                            <td>@ScheduleReader["NumTimes"]</td>
+                            <td>@ScheduleReader["PositionInQueue"]</td> @* Display the new column *@
+                        </tr>
+                    }
+                    DBClass.Lab1DBConnection.Close();
+                }
+            </tbody>
+        </table>
+    }
+}

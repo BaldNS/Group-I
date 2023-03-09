@@ -1,0 +1,48 @@
+﻿@page
+@using Lab1.Pages.DB;
+@using System.Data.SqlClient;
+@model Lab2.Pages.FacultyHomeModel
+@{
+}
+
+@{
+    if (HttpContext.Session.GetString("username") != null)
+    {
+        <h3> Welcome Professor @HttpContext.Session.GetString("username")! </h3>
+        <br/>
+        <p> Upcoming Meetings:</p>
+        <table class="table table-bordered table-responsive table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Date and Time:</th>
+                    <th>Student First Name:</th>
+                    <th>Student Last Name:</th>
+                    <th>Meeting Purpose:</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    string sqlQuery = @"SELECT Meetings.FirstName, Meetings.LastName, Meetings.DateandTime, Meetings.Purpose
+                        FROM Meetings
+                        INNER JOIN Faculty ON Meetings.Professor = Faculty.Professor
+                        INNER JOIN FacultyCredentials ON Faculty.CredentialID = FacultyCredentials.FacultyCredID
+                        WHERE FacultyCredentials.Username = '" + HttpContext.Session.GetString("username") + "';";
+
+                    SqlDataReader ScheduleReader = DBClass.GeneralReaderQuery(sqlQuery);
+
+                    while (ScheduleReader.Read())
+                    {
+                        <tr>
+                            <td>@ScheduleReader["DateandTime"]</td>
+                            <td>@ScheduleReader["FirstName"]</td>
+                            <td>@ScheduleReader["LastName"]</td>
+                            <td>@ScheduleReader["Purpose"]</td>
+                        </tr>
+                    }
+                    DBClass.Lab1DBConnection.Close();
+                }
+            </tbody>
+        </table>
+
+    }
+}

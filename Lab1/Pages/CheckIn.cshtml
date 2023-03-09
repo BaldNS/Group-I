@@ -1,0 +1,42 @@
+﻿@page
+@model Lab2.Pages.CheckInModel
+@{
+}
+
+@{
+    if (HttpContext.Session.GetString("username") != null)
+    {   
+        @*Shows error if user already checked into office hours*@
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">
+                <strong>Error:</strong> @TempData["Error"]
+            </div>
+        }
+
+        @*Populates live drop down menu of Professors*@
+        <form method="post">
+            <p>Select professor to show their office hours times:</p>
+
+            <select asp-for="Professor" asp-items="Model.Professors" name="Professor">
+                <option value="-1">Select Professor</option>
+            </select>
+            <input type="submit" value="Show Times" class="btn btn-outline-secondary btn-sm" />
+
+        </form>
+        
+        @*Populates Times for selected Professor*@
+        @if (Model.OfficeHourTimes != null)
+        {
+            <form method="post" asp-page-handler="CheckIn">
+                <br />
+                <p>Select an Office Hour Time:</p>
+                <select asp-for="Time" asp-items="Model.OfficeHourTimes" name="Time">
+                    <option value="" />
+                </select>
+                <input type="submit" value="Check in" class="btn btn-primary" />
+            </form>
+        }
+    }
+}
+

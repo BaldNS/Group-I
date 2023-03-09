@@ -1,0 +1,33 @@
+﻿@page
+@model Lab2.Pages.IndexModel
+@{
+}
+
+<form asp-action="Login">
+    <p>Please select Student or Faculty:</p>
+    <select asp-for="PersonType">
+        <option value="0">Student</option>
+        <option value="1">Faculty</option>
+    </select>
+    <br/>
+    <input asp-for="Username" placeholder="Username" required/>
+    <br />
+    <input asp-for="Password" placeholder="Password" required/>
+    <br />
+    <p></p>
+    <input type="submit" value="login ->" class="btn btn-primary" />
+    <p></p>
+    <br/>
+    <a asp-page="/CreateAccount">Create New Account</a>
+</form>
+
+@{
+    if (HttpContext.Session.GetString("username") != null)
+    {
+        
+    }
+    else
+    {
+        <p class="text-danger">@ViewData["LoginMessage"]</p>
+    }
+}

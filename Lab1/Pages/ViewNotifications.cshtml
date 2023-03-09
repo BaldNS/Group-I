@@ -1,0 +1,51 @@
+﻿@page
+@using System.Data.SqlClient;
+@using Lab1.Pages.DB;
+@model Lab3.Pages.ViewNotificationsModel
+@{
+    if (HttpContext.Session.GetString("username") != null)
+    {
+        <p> The following professor(s) is ready for you to come into their office hours: </p>
+        <table class="table table-bordered table-responsive table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Professor:</th>
+                    <th>Day:</th>
+                    <th>Time:</th>
+                    <th>Office Room:</th>
+                    <th>Remove Notification:</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    string sqlQuery = "SELECT q.QueueID, f.Professor, oh.OfficeDate, oh.OfficeTime, oh.OfficeRoom " +
+                  "FROM Queue q " +
+                  "JOIN StudentCredentials sc ON q.StudentID = sc.StudentCredID " +
+                  "JOIN OfficeHour oh ON q.OfficeHourID = oh.OfficeHourID " +
+                  "JOIN Faculty f ON oh.ProfessorID = f.ProfessorID " +
+                  "WHERE sc.Username = '" + HttpContext.Session.GetString("username") + "' " +
+                  "AND Status = 1;";
+
+                    SqlDataReader ScheduleReader = DBClass.GeneralReaderQuery(sqlQuery);
+
+                    while (ScheduleReader.Read())
+                    {
+                        <tr>
+                            <td>@ScheduleReader["Professor"]</td>
+                            <td>@ScheduleReader["OfficeDate"]</td>
+                            <td>@ScheduleReader["OfficeTime"]</td>
+                            <td>@ScheduleReader["OfficeRoom"]</td>
+                            <td>
+                    <form method="post" asp-page="ViewNotifications">
+                        <input type="hidden" name="queueID" value="@ScheduleReader["QueueID"]" />
+                        <button type="submit" class="btn btn-danger">Acknowledge Notification</button>
+                    </form>
+                            </td>
+                        </tr>
+                    }
+                    DBClass.Lab1DBConnection.Close();
+                }
+            </tbody>
+        </table>
+    }
+}

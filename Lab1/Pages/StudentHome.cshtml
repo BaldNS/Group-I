@@ -1,0 +1,61 @@
+﻿@page
+@using System.Data.SqlClient;
+@using Lab1.Pages.DB;
+@model Lab2.Pages.StudentHomeModel
+@{
+}
+
+@{
+    if (HttpContext.Session.GetString("username") != null)
+    {
+        @*Presents student home page reading live data for UI*@
+        <h3> Welcome Student @HttpContext.Session.GetString("username")! </h3>
+        <br />
+        //<p>Upcoming Meetings:</p>
+        //<table class="table table-bordered table-responsive table-striped table-hover">
+        //    <thead class="table-dark">
+        //        <tr>
+                   
+        //            <th>Date and Time:</th>
+        //            <th>Professor:</th>
+        //            <th>Meeting Purpose:</th>
+        //            <th>Office Room:</th>
+        //            <th>Change Meeting:</th>
+        //        </tr>
+        //    </thead>
+        //    <tbody>
+        //        @{
+        //            string sqlQuery = @"SELECT DISTINCT (Meetings.MeetingID), Meetings.Professor, Meetings.DateandTime, Meetings.Purpose, OfficeHour.OfficeRoom
+        //                FROM Meetings
+        //                INNER JOIN StudentCredentials ON Meetings.StudentCredID = StudentCredentials.StudentCredID
+        //                INNER JOIN FacultyCredentials ON Meetings.FacultyCredID = FacultyCredentials.FacultyCredID
+        //                INNER JOIN Faculty ON Faculty.CredentialID = FacultyCredentials.FacultyCredID
+        //                INNER JOIN OfficeHour ON OfficeHour.ProfessorID = Faculty.ProfessorID
+        //                WHERE Meetings.Professor = Faculty.Professor AND StudentCredentials.Username = '" + HttpContext.Session.GetString("username") + "';";
+
+
+        //            SqlDataReader ScheduleReader = DBClass.GeneralReaderQuery(sqlQuery);
+
+        //            while (ScheduleReader.Read())
+        //            {
+        //                <tr>
+                           
+        //                    <td>@ScheduleReader["DateandTime"]</td>
+        //                    <td>@ScheduleReader["Professor"]</td>
+        //                    <td>@ScheduleReader["Purpose"]</td>
+        //                    <td>@ScheduleReader["OfficeRoom"]</td>
+        //                    <td>
+        //                    <a asp-page="EditSignUp" class="btn btn-primary" asp-route-meetingid="@ScheduleReader["MeetingID"]">Edit</a>
+        //                    </td>
+        //                </tr>
+
+        //            }
+        //            DBClass.Lab1DBConnection.Close();
+        //        }
+        //    </tbody>
+        //</table>
+
+        //<a asp-page="SignUp" class="btn btn-primary">Schedule a Meeting</a>
+        <a asp-page="CheckIn" class="btn btn-dark">Check Into Office Hours</a>
+    }
+}

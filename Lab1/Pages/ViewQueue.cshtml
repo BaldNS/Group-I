@@ -1,0 +1,63 @@
+﻿@page
+@using System.Data.SqlClient;
+@using Lab1.Pages.DB;
+@model Lab2.Pages.ViewQueueModel
+@{
+}
+
+@{
+    if (HttpContext.Session.GetString("username") != null)
+    {
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">
+                <strong>Success:</strong> @TempData["Success"]
+            </div>
+        }
+        @*Presents live queue of specific faculty member signed in*@
+        <h3> Welcome Professor @HttpContext.Session.GetString("username")! </h3>
+        <br />
+        <p> Office Hours Queue:</p>
+        <table class="table table-bordered table-responsive table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Student First Name:</th>
+                    <th>Student Last Name:</th>
+                    <th>Office Hour Day:</th>
+                    <th>Office Hour Time:</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    string sqlQuery = @"SELECT s.FirstName, s.LastName, o.OfficeDate, o.OfficeTime, q.QueueID
+        FROM Student s
+        JOIN Queue q ON s.PersonID = q.StudentID
+        JOIN OfficeHour o ON q.OfficeHourID = o.OfficeHourID
+        JOIN Faculty f ON o.ProfessorID = f.ProfessorID
+        JOIN FacultyCredentials fc ON f.CredentialID = fc.FacultyCredID
+        WHERE fc.Username = '" + HttpContext.Session.GetString("username") + "'ORDER BY o.OfficeDate ASC;";
+
+                    SqlDataReader ScheduleReader = DBClass.GeneralReaderQuery(sqlQuery);
+
+                    while (ScheduleReader.Read())
+                    {
+                        <tr>
+                            <td>@ScheduleReader["FirstName"]</td>
+                            <td>@ScheduleReader["LastName"]</td>
+                            <td>@ScheduleReader["OfficeDate"]</td>
+                            <td>@ScheduleReader["OfficeTime"]</td>
+                            <td>
+                                <form method="post" asp-page="ViewQueue">
+                                    <input type="hidden" name="queueId" value="@ScheduleReader["QueueID"]" />
+                                    <button type="submit" class="btn btn-primary">Send Notification</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    DBClass.Lab1DBConnection.Close();
+                }
+            </tbody>
+        </table>
+    }
+}

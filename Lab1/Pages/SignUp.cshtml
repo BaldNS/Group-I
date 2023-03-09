@@ -1,0 +1,49 @@
+﻿@page
+@model Lab2.Pages.SignUpModel
+@{
+
+    if (HttpContext.Session.GetString("username") != null)
+    {
+
+        @*Presents sign up form*@
+        <form asp-page="SignUp">
+            <h3>Meeting Sign Up Form</h3>
+            <br />
+            <p>Enter Name:</p>
+            <input asp-for="NewMeeting.FirstName" id="firstName" placeholder="First Name" required />
+            <input asp-for="NewMeeting.LastName" id="lastName" placeholder="Last Name" required />
+            <button asp-page="SignUp" asp-page-handler="PopulateHandler" formnovalidate>Populate Form</button>
+            <br />
+            <p>
+
+            </p>
+            <p>Select Professor:</p>
+            <select asp-for="NewMeeting.Professor" id="NewMeeting_Professor" required>
+                <option value="">--Select Professor--</option>
+                <option value="Michel Mitri">Michel Mitri</option>
+                <option value="Carey Cole">Carey Cole</option>
+                <option value="John Guo">John Guo</option>
+                <option value="Jeremy Ezell">Jeremy Ezell</option>
+            </select>
+            <p>
+
+            </p>
+            <br />
+            <p>Meeting Purpose:</p>
+            <input type="radio" asp-for="NewMeeting.Purpose" value="Test Preparation" required /> Test Preparation<br />
+            <input type="radio" asp-for="NewMeeting.Purpose" value="Assignment Questions" /> Assignment Questions<br />
+            <input type="radio" asp-for="NewMeeting.Purpose" value="Material Clarification" /> Material Clarification<br />
+            <input type="radio" asp-for="NewMeeting.Purpose" value="Review Coursework" /> Review Coursework<br />
+            <input type="radio" asp-for="NewMeeting.Purpose" value="Discuss Grade" /> Discuss Grade<br />
+            <br />
+            <p>Choose a Date and Time:</p>
+            <input asp-for="NewMeeting.DateandTime" type="datetime-local" required />
+
+            <br />
+            <p> </p>
+            <input class="btn btn-primary" type="submit" value="Sign Up for Meeting" />
+            <a href="/SignUp" class="btn btn-secondary">Clear</a>
+
+        </form>
+    }
+}

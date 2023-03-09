@@ -1,0 +1,50 @@
+﻿@page
+@model Lab2.Pages.EditSignUpModel
+@{
+
+
+    if (HttpContext.Session.GetString("username") != null)
+    {
+
+        @*Presents Edit sign up for for user*@
+        <form asp-page="EditSignUp">
+            <h3>Edit Meeting Sign Up Form</h3>
+            <br />
+            <p>Enter Name:</p>
+            <input type="hidden" asp-for="@Model.MeetingToUpdate.MeetingID" />
+            <input asp-for="@Model.MeetingToUpdate.FirstName" id="firstName" placeholder="First Name" required />
+            <input asp-for="@Model.MeetingToUpdate.LastName" id="lastName" placeholder="Last Name" required />
+            <button asp-page="EditSignUp" asp-page-handler="PopulateHandler" formnovalidate>Populate Form</button>
+            <br />
+            <p>
+
+            </p>
+            <p>Select Professor:</p>
+            <select asp-for="@Model.MeetingToUpdate.Professor" id="NewMeeting_Professor" required>
+                <option value="">--Select Professor--</option>
+                <option value="Michel Mitri">Michel Mitri</option>
+                <option value="Carey Cole">Carey Cole</option>
+                <option value="John Guo">John Guo</option>
+                <option value="Jeremy Ezell">Jeremy Ezell</option>
+            </select>
+            <p>
+
+            </p>
+            <br />
+            <p>Meeting Purpose:</p>
+            <input type="radio" asp-for="@Model.MeetingToUpdate.Purpose" value="Test Preparation" required /> Test Preparation<br />
+            <input type="radio" asp-for="@Model.MeetingToUpdate.Purpose" value="Assignment Questions" /> Assignment Questions<br />
+            <input type="radio" asp-for="@Model.MeetingToUpdate.Purpose" value="Material Clarification" /> Material Clarification<br />
+            <input type="radio" asp-for="@Model.MeetingToUpdate.Purpose" value="Review Coursework" /> Review Coursework<br />
+            <input type="radio" asp-for="@Model.MeetingToUpdate.Purpose" value="Discuss Grade" /> Discuss Grade<br />
+            <br />
+            <p>Choose a Date and Time:</p>
+            <input asp-for="@Model.MeetingToUpdate.DateandTime" type="datetime-local" required />
+
+            <br />
+            <p> </p>
+            <input asp-page="EditSignUp" class="btn btn-primary" type="submit" value="Edit Sign Up" />
+            <a asp-page="StudentHome" class="btn btn-secondary">Cancel</a>
+        </form>
+    }
+}

@@ -1,0 +1,41 @@
+﻿@page
+@model Lab3.Pages.CreateAccountModel
+@{
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <strong>Error:</strong> @TempData["Error"]
+    </div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+            <strong></strong> @TempData["Success"]
+        </div>
+}
+
+<form asp-action="CreateAccount">
+    <p>Are you a student or faculty?</p>
+    <select asp-for="PersonType">
+        <option value="0">Student</option>
+        <option value="1">Faculty</option>
+    </select>
+    <br />
+    <p></p>
+    <p>Please enter first and Last name:</p>
+    <input asp-for="FirstName" id="firstName" placeholder="First Name" required />
+    <br/>
+    <input asp-for="LastName" id="lastName" placeholder="Last Name" required />
+    <p></p>
+    <p>Please create a username:</p>
+    <input asp-for="Username" placeholder="Username" required/>
+    <br />
+    <p></p>
+    <p>Please create a password:</p>
+    <input asp-for="Password" placeholder="Password" required/>
+    <br />
+    <p></p>
+    <input type="submit" value="Create Account" class="btn btn-primary" />
+    </form>
